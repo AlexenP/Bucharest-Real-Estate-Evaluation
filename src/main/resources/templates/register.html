@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+</head>
+<body>
+<h1>Register</h1>
+<form action="#" th:action="@{/register}" method="post">
+    <div>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+    </div>
+    <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+    </div>
+    <div>
+        <label for="authority">Authority:</label>
+        <select id="authority" name="authority" required>
+            <option value="ROLE_USER">User</option>
+            <option value="ROLE_ADMIN">Admin</option>
+        </select>
+    </div>
+    <div id="adminPasswordDiv" style="display:none;">
+        <label for="adminPassword">Admin Password:</label>
+        <input type="password" id="adminPassword" name="adminPassword">
+    </div>
+    <div>
+        <button type="submit">Register</button>
+    </div>
+</form>
+
+<script>
+    document.getElementById('authority').addEventListener('change', function() {
+        var adminPasswordDiv = document.getElementById('adminPasswordDiv');
+        if (this.value === 'ROLE_ADMIN') {
+            adminPasswordDiv.style.display = 'block';
+        } else {
+            adminPasswordDiv.style.display = 'none';
+        }
+    });
+</script>
+
+<!-- Add a script to show an alert if there's an error -->
+<script th:if="${param.error}">
+    alert('Error: Invalid admin password');
+</script>
+
+<!-- Display success message -->
+<div th:if="${success}" style="color: green;">
+    <p th:text="${success}"></p>
+</div>
+
+</body>
+</html>

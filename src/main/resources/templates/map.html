@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bucharest Neighborhood Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+    <style>
+        #map {
+            height: 600px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<h1>Bucharest Neighborhood Map</h1>
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+    var map = L.map('map').setView([44.4268, 26.1025], 12);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+    }).addTo(map);
+
+    // Fetch GeoJSON data
+    fetch('/content/map.geojson')
+        .then(response => response.json())
+        .then(data => {
+            // Add neighborhood polygons to the map
+            L.geoJSON(data, {
+                onEachFeature: function (feature, layer) {
+                    layer.on('click', function () {
+                        alert('You clicked on ' + feature.properties.name);
+                        // Redirect or perform action to generate report
+                        // window.location.href = '/generate-report?neighborhood=' + feature.properties.name;
+                    });
+                }
+            }).addTo(map);
+        })
+        .catch(error => console.error('Error loading GeoJSON data:', error));
+</script>
+</body>
+</html>

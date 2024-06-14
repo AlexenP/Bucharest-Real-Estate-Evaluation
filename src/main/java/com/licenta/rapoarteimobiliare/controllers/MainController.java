@@ -18,24 +18,13 @@ public class MainController {
         return "preferinte";
     }
 
-    @PostMapping("/save-preferences")
-    public String savePreferences(RedirectAttributes redirectAttributes) {
-        // Save user preferences logic
-        redirectAttributes.addFlashAttribute("message", "Preferences saved successfully!");
-        return "redirect:/map";
-    }
+
 
     @GetMapping("/map")
     public String mapPage() {
         return "map";
     }
 
-    @PostMapping("/save-neighborhood")
-    public String saveNeighborhood(RedirectAttributes redirectAttributes) {
-        // Save selected neighborhood logic
-        redirectAttributes.addFlashAttribute("message", "Neighborhood saved successfully!");
-        return "redirect:/raport";
-    }
 
     @GetMapping("/raport")
     public String raportPage() {

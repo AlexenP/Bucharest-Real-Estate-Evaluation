@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Preferinte</title>
@@ -30,7 +30,8 @@
 <body>
 <div class="container">
     <h1>Preferinte pentru raport</h1>
-    <form action="/save-preferences" method="post">
+    <form action="/save-preferences" method="post" th:action="@{/save-preferences}">
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
         <div class="form-group">
             <label for="tipImobil">Tip imobil:</label>
             <select id="tipImobil" name="tipImobil" required>
@@ -40,7 +41,8 @@
         </div>
         <div class="form-group">
             <label for="numarCamere">Numar camere:</label>
-            <select id="numarCamere" name="numarCamere" required>
+            <select id="numarCamere" name="numarCamere">
+                <option value="" selected>None</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -49,11 +51,11 @@
         </div>
         <div class="form-group">
             <label for="suprafataMinima">Suprafata utila minima (mp):</label>
-            <input type="number" id="suprafataMinima" name="suprafataMinima" required>
+            <input type="number" id="suprafataMinima" name="suprafataMinima">
         </div>
         <div class="form-group">
             <label for="anConstructie">Anul constructiei de la:</label>
-            <input type="number" id="anConstructie" name="anConstructie" required>
+            <input type="number" id="anConstructie" name="anConstructie">
         </div>
         <div class="form-group">
             <label>Facilitati:</label>

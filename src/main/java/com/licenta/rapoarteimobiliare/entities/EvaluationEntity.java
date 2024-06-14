@@ -2,6 +2,7 @@ package com.licenta.rapoarteimobiliare.entities;
 
 import jakarta.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 public class EvaluationEntity {
@@ -24,7 +25,19 @@ public class EvaluationEntity {
 
     private String type_property;
 
+    private String tipImobil;
+
+    private Integer numarCamere;
+
+    private Integer suprafataMinima;
+
+    private Integer anConstructie;
+
+    @ElementCollection
+    private Set<String> facilitati;
+
     // Getters and Setters
+
     public int getEvaluationId() {
         return evaluationId;
     }
@@ -71,5 +84,45 @@ public class EvaluationEntity {
 
     public void setType_property(String type_property) {
         this.type_property = type_property;
+    }
+
+    public String getTipImobil() {
+        return tipImobil;
+    }
+
+    public void setTipImobil(String tipImobil) {
+        this.tipImobil = tipImobil;
+    }
+
+    public Integer getNumarCamere() {
+        return numarCamere;
+    }
+
+    public void setNumarCamere(Integer numarCamere) {
+        this.numarCamere = numarCamere;
+    }
+
+    public Integer getSuprafataMinima() {
+        return suprafataMinima;
+    }
+
+    public void setSuprafataMinima(Integer suprafataMinima) {
+        this.suprafataMinima = suprafataMinima;
+    }
+
+    public Integer getAnConstructie() {
+        return anConstructie;
+    }
+
+    public void setAnConstructie(Integer anConstructie) {
+        this.anConstructie = anConstructie;
+    }
+
+    public Set<String> getFacilitati() {
+        return facilitati;
+    }
+
+    public void setFacilitati(Set<String> facilitati) {
+        this.facilitati = facilitati;
     }
 }

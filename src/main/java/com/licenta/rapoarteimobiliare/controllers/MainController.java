@@ -14,7 +14,7 @@ public class MainController {
     }
 
     @GetMapping("/preferinte")
-    public String preferintePage() {
+    public String showPreferences() {
         return "preferinte";
     }
 

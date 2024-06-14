@@ -46,7 +46,7 @@ public class RegistrationController {
 
         UserEntity user = new UserEntity();
         user.setUsername(username);
-        user.setPassword(passwordEncoder.encode(password));
+        user.setPassword(passwordEncoder.encode(password));  // Encode password
 
         AuthorityEntity authorityEntity = authorityRepository.findByAuthority(authority);
         if (authorityEntity == null) {
@@ -62,5 +62,4 @@ public class RegistrationController {
         redirectAttributes.addFlashAttribute("success", "User created successfully!");
         return "redirect:/login";
     }
-
 }

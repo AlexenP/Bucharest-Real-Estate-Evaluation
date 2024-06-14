@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Main Page</title>
+</head>
+<body>
+<h1>Main Page</h1>
+<p th:if="${param.logout}">You have been logged out successfully.</p>
+<p th:if="${param.success}">Login successful!</p>
+
+<!-- Buttons for creating and viewing reports -->
+<button onclick="window.location.href='/create-report'">Create Report</button>
+<button onclick="window.location.href='/view-reports'">View Reports</button>
+</body>
+</html>

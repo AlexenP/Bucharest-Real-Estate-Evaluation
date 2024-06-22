@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.servlet.http.HttpSession;
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
 import java.util.Set;
@@ -52,7 +54,9 @@ public class ReportController {
 
         // Create and save the evaluation
         EvaluationEntity evaluation = new EvaluationEntity();
-        evaluation.setName("New Report");
+        String reportName = user.getUsername() + "_" + preferenceDTO.getTipImobil() + "_" + area.getAreaName() + "_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+
+        evaluation.setName(reportName);
         evaluation.setDate(new Date());
         evaluation.setUser(user);
         evaluation.setArea(area);

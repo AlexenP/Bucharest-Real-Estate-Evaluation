@@ -1,15 +1,15 @@
 package com.licenta.rapoarteimobiliare.controllers;
 
-import com.licenta.rapoarteimobiliare.DTO.EvaluationDTO;
+import com.licenta.rapoarteimobiliare.DTO.AreaDTO;
 import com.licenta.rapoarteimobiliare.DTO.EvaluationReportDTO;
 import com.licenta.rapoarteimobiliare.DTO.PreferenceDTO;
+import com.licenta.rapoarteimobiliare.DTO.UserDTO;
 import com.licenta.rapoarteimobiliare.entities.AreaEntity;
 import com.licenta.rapoarteimobiliare.entities.EvaluationEntity;
 import com.licenta.rapoarteimobiliare.entities.UserEntity;
 import com.licenta.rapoarteimobiliare.repositories.AreaRepository;
 import com.licenta.rapoarteimobiliare.repositories.EvaluationRepository;
 import com.licenta.rapoarteimobiliare.repositories.UserRepository;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -17,11 +17,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import jakarta.servlet.http.HttpSession;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 @Controller
 public class ReportController {
@@ -36,16 +36,19 @@ public class ReportController {
     private UserRepository userRepository;
 
     @PostMapping("/save-evaluation")
-    public String saveEvaluation(EvaluationDTO evaluationDTO,
-                                 Authentication authentication,
-                                 HttpSession session,
-                                 RedirectAttributes redirectAttributes) {
+    public String saveEvaluation(
+            @RequestParam String areaName,
+            Authentication authentication,
+            HttpSession session) {
 
         UserEntity user = userRepository.findByUsername(authentication.getName());
-        AreaEntity area = areaRepository.findByAreaName(evaluationDTO.getAreaName());
+        AreaEntity area = areaRepository.findByAreaName(areaName);
 
         // Retrieve preferences from the session
         PreferenceDTO preferenceDTO = (PreferenceDTO) session.getAttribute("preferenceDTO");
+        if (preferenceDTO == null) {
+            throw new IllegalStateException("Preferences not found in session.");
+        }
 
         // Create and save the evaluation
         EvaluationEntity evaluation = new EvaluationEntity();
@@ -69,38 +72,42 @@ public class ReportController {
 
     @GetMapping("/get-session-evaluation-id")
     @ResponseBody
-    public Map<String, Integer> getSessionEvaluationId(HttpSession session) {
+    public int getSessionEvaluationId(HttpSession session) {
         Integer evaluationId = (Integer) session.getAttribute("currentEvaluationId");
-        Map<String, Integer> response = new HashMap<>();
-        response.put("evaluationId", evaluationId);
-        return response;
+        if (evaluationId == null) {
+            throw new IllegalStateException("No evaluation ID found in session.");
+        }
+        return evaluationId;
     }
 
     @GetMapping("/get-report")
     @ResponseBody
-    public EvaluationReportDTO getReport(@RequestParam Integer reportId) {
-        EvaluationEntity evaluation = evaluationRepository.findById(reportId)
-                .orElseThrow(() -> new RuntimeException("Report not found"));
+    public EvaluationReportDTO getReport(@RequestParam int reportId) {
+        Optional<EvaluationEntity> evaluation = evaluationRepository.findById(reportId);
+        if (!evaluation.isPresent()) {
+            throw new IllegalStateException("No report found for the given ID.");
+        }
 
-        // Convert EvaluationEntity to EvaluationReportDTO
-        EvaluationReportDTO reportDTO = new EvaluationReportDTO();
-        reportDTO.setName(evaluation.getName());
-        reportDTO.setDate(evaluation.getDate());
-        reportDTO.setUser(evaluation.getUser());
-        reportDTO.setArea(evaluation.getArea());
-        reportDTO.setTipImobil(evaluation.getTipImobil());
-        reportDTO.setNumarCamere(evaluation.getNumarCamere());
-        reportDTO.setSuprafataMinima(evaluation.getSuprafataMinima());
-        reportDTO.setAnConstructie(evaluation.getAnConstructie());
-        reportDTO.setFacilitati(evaluation.getFacilitati());
+        EvaluationEntity evaluationEntity = evaluation.get();
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUserId(evaluationEntity.getUser().getUserId());
+        userDTO.setUsername(evaluationEntity.getUser().getUsername());
 
-        // Debugging information
-        System.out.println("Retrieved EvaluationReportDTO: " + reportDTO);
+        AreaDTO areaDTO = new AreaDTO();
+        areaDTO.setAreaId(evaluationEntity.getArea().getAreaId());
+        areaDTO.setAreaName(evaluationEntity.getArea().getAreaName());
 
-        return reportDTO;
+        EvaluationReportDTO evaluationReportDTO = new EvaluationReportDTO();
+        evaluationReportDTO.setName(evaluationEntity.getName());
+        evaluationReportDTO.setDate(evaluationEntity.getDate());
+        evaluationReportDTO.setUser(userDTO);
+        evaluationReportDTO.setArea(areaDTO);
+        evaluationReportDTO.setTipImobil(evaluationEntity.getTipImobil());
+        evaluationReportDTO.setNumarCamere(evaluationEntity.getNumarCamere());
+        evaluationReportDTO.setSuprafataMinima(evaluationEntity.getSuprafataMinima());
+        evaluationReportDTO.setAnConstructie(evaluationEntity.getAnConstructie());
+        evaluationReportDTO.setFacilitati(evaluationEntity.getFacilitati());
+
+        return evaluationReportDTO;
     }
-
-
-
-
 }

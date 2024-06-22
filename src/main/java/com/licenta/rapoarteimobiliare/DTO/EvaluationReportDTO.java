@@ -1,7 +1,6 @@
 package com.licenta.rapoarteimobiliare.DTO;
 
-import com.licenta.rapoarteimobiliare.entities.AreaEntity;
-import com.licenta.rapoarteimobiliare.entities.UserEntity;
+
 
 import java.util.Date;
 import java.util.Set;
@@ -9,8 +8,8 @@ import java.util.Set;
 public class EvaluationReportDTO {
     private String name;
     private Date date;
-    private UserEntity user;
-    private AreaEntity area;
+    private UserDTO user;
+    private AreaDTO area;
     private String type_property;
     private String tipImobil;
     private Integer numarCamere;
@@ -18,7 +17,7 @@ public class EvaluationReportDTO {
     private Integer anConstructie;
     private Set<String> facilitati;
 
-    public EvaluationReportDTO(String name, Date date, UserEntity user, AreaEntity area, String type_property, String tipImobil, Integer numarCamere, Integer suprafataMinima, Integer anConstructie, Set<String> facilitati) {
+    public EvaluationReportDTO(String name, Date date, UserDTO user, AreaDTO area, String type_property, String tipImobil, Integer numarCamere, Integer suprafataMinima, Integer anConstructie, Set<String> facilitati) {
         this.name = name;
         this.date = date;
         this.user = user;
@@ -50,19 +49,19 @@ public class EvaluationReportDTO {
         this.date = date;
     }
 
-    public UserEntity getUser() {
+    public UserDTO getUser() {
         return user;
     }
 
-    public void setUser(UserEntity user) {
+    public void setUser(UserDTO user) {
         this.user = user;
     }
 
-    public AreaEntity getArea() {
+    public AreaDTO getArea() {
         return area;
     }
 
-    public void setArea(AreaEntity area) {
+    public void setArea(AreaDTO area) {
         this.area = area;
     }
 
@@ -114,3 +113,4 @@ public class EvaluationReportDTO {
         this.facilitati = facilitati;
     }
 }
+

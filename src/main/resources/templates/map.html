@@ -3,17 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <title>Bucharest Neighborhood Map</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
     <style>
         #map {
             height: 600px;
             width: 100%;
         }
+        #popup {
+            display: none;
+            position: absolute;
+            background-color: white;
+            border: 1px solid #ccc;
+            padding: 10px;
+            z-index: 1000;
+        }
     </style>
 </head>
 <body>
 <h1>Bucharest Neighborhood Map</h1>
 <div id="map"></div>
+<div id="popup">
+    <p id="selectedNeighborhood"></p>
+    <button id="nextBtn">Next</button>
+</div>
+
+<form id="neighborhoodForm" action="/save-evaluation" method="post">
+    <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+    <input type="hidden" id="neighborhoodName" name="areaName" />
+    <input type="hidden" id="tipImobil" name="tipImobil" th:value="${session.preferenceDTO.tipImobil}" />
+    <input type="hidden" id="numarCamere" name="numarCamere" th:value="${session.preferenceDTO.numarCamere}" />
+    <input type="hidden" id="suprafataMinima" name="suprafataMinima" th:value="${session.preferenceDTO.suprafataMinima}" />
+    <input type="hidden" id="anConstructie" name="anConstructie" th:value="${session.preferenceDTO.anConstructie}" />
+    <input type="hidden" id="facilitati" name="facilitati" th:value="${session.preferenceDTO.facilitati}" />
+</form>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
@@ -23,22 +46,27 @@
         maxZoom: 19,
     }).addTo(map);
 
-    // Fetch GeoJSON data
+    var selectedNeighborhood = "";
+
     fetch('/content/map.geojson')
         .then(response => response.json())
         .then(data => {
-            // Add neighborhood polygons to the map
             L.geoJSON(data, {
                 onEachFeature: function (feature, layer) {
                     layer.on('click', function () {
-                        alert('You clicked on ' + feature.properties.name);
-                        // Redirect or perform action to generate report
-                        // window.location.href = '/generate-report?neighborhood=' + feature.properties.name;
+                        selectedNeighborhood = feature.properties.name;
+                        document.getElementById('neighborhoodName').value = selectedNeighborhood;
+                        document.getElementById('selectedNeighborhood').innerText = 'Ai selectat cartierul ' + selectedNeighborhood;
+                        document.getElementById('popup').style.display = 'block';
                     });
                 }
             }).addTo(map);
         })
         .catch(error => console.error('Error loading GeoJSON data:', error));
+
+    document.getElementById('nextBtn').addEventListener('click', function () {
+        document.getElementById('neighborhoodForm').submit();
+    });
 </script>
 </body>
 </html>

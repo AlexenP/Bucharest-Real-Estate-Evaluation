@@ -4,11 +4,12 @@ import jakarta.persistence.*;
 import java.util.Set;
 
 @Entity
+@Table(name = "area_entity", uniqueConstraints = @UniqueConstraint(columnNames = "areaName"))
 public class AreaEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int areaId;
-
+    @Column(unique = true, nullable = false)
     private String areaName;
     private float pricePerSquareMeter;
     private boolean hasWaterIssues;

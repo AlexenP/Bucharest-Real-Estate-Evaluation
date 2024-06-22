@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AreaRepository extends JpaRepository<AreaEntity, Integer>{
+    AreaEntity findByAreaName(String areaName);
+    boolean existsByAreaName(String areaName);
 }

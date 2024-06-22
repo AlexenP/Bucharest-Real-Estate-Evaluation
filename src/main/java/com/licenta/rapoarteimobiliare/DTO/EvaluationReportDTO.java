@@ -1,49 +1,37 @@
-package com.licenta.rapoarteimobiliare.entities;
+package com.licenta.rapoarteimobiliare.DTO;
 
-import jakarta.persistence.*;
+import com.licenta.rapoarteimobiliare.entities.AreaEntity;
+import com.licenta.rapoarteimobiliare.entities.UserEntity;
+
 import java.util.Date;
 import java.util.Set;
 
-@Entity
-public class EvaluationEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int evaluationId;
-
+public class EvaluationReportDTO {
     private String name;
-
-    @Temporal(TemporalType.DATE)
     private Date date;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
     private UserEntity user;
-
-    @ManyToOne
-    @JoinColumn(name = "area_id")
     private AreaEntity area;
-
-    // Casa sau Apartament
-
+    private String type_property;
     private String tipImobil;
-
     private Integer numarCamere;
-
     private Integer suprafataMinima;
-
     private Integer anConstructie;
-
-    @ElementCollection
     private Set<String> facilitati;
 
-    // Getters and Setters
-
-    public int getEvaluationId() {
-        return evaluationId;
+    public EvaluationReportDTO(String name, Date date, UserEntity user, AreaEntity area, String type_property, String tipImobil, Integer numarCamere, Integer suprafataMinima, Integer anConstructie, Set<String> facilitati) {
+        this.name = name;
+        this.date = date;
+        this.user = user;
+        this.area = area;
+        this.type_property = type_property;
+        this.tipImobil = tipImobil;
+        this.numarCamere = numarCamere;
+        this.suprafataMinima = suprafataMinima;
+        this.anConstructie = anConstructie;
+        this.facilitati = facilitati;
     }
 
-    public void setEvaluationId(int evaluationId) {
-        this.evaluationId = evaluationId;
+    public EvaluationReportDTO() {
     }
 
     public String getName() {
@@ -76,6 +64,14 @@ public class EvaluationEntity {
 
     public void setArea(AreaEntity area) {
         this.area = area;
+    }
+
+    public String getType_property() {
+        return type_property;
+    }
+
+    public void setType_property(String type_property) {
+        this.type_property = type_property;
     }
 
     public String getTipImobil() {

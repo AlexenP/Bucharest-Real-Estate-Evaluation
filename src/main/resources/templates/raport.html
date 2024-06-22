@@ -2,9 +2,113 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Report</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 50%;
+            margin: 0 auto;
+            padding-top: 20px;
+        }
+        .report-section {
+            margin-bottom: 20px;
+        }
+        .report-section h2 {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+        .report-item {
+            margin-bottom: 10px;
+        }
+        .report-item label {
+            font-weight: bold;
+        }
+        .report-item span {
+            margin-left: 10px;
+        }
+    </style>
 </head>
 <body>
+<div class="container">
+    <h1>Report</h1>
+    <div id="reportContent">
+        <!-- Report content will be dynamically inserted here -->
+    </div>
+</div>
 
+<script>
+    function getReportData(reportId) {
+        fetch(`/get-report?reportId=${reportId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok: ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("Report Data:", data); // Debugging information
+                const reportContent = document.getElementById('reportContent');
+
+                if (!data || Object.keys(data).length === 0) {
+                    reportContent.innerHTML = '<p>No data available for this report.</p>';
+                    return;
+                }
+
+                const sections = [
+                    { label: 'Report Name', value: data.name },
+                    { label: 'Date', value: new Date(data.date).toLocaleDateString() },
+                    { label: 'User', value: data.user.username },
+                    { label: 'Area', value: data.area.areaName },
+                    { label: 'Type of Property', value: data.type_property },
+                    { label: 'Tip Imobil', value: data.tipImobil },
+                    { label: 'Number of Rooms', value: data.numarCamere },
+                    { label: 'Minimum Surface', value: data.suprafataMinima },
+                    { label: 'Year of Construction', value: data.anConstructie },
+                    { label: 'Facilities', value: data.facilitati.join(', ') },
+                ];
+
+                sections.forEach(section => {
+                    const reportSection = document.createElement('div');
+                    reportSection.classList.add('report-section');
+
+                    const label = document.createElement('label');
+                    label.textContent = section.label + ':';
+
+                    const value = document.createElement('span');
+                    value.textContent = section.value;
+
+                    reportSection.appendChild(label);
+                    reportSection.appendChild(value);
+                    reportContent.appendChild(reportSection);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching report data:', error);
+                const reportContent = document.getElementById('reportContent');
+                reportContent.innerHTML = '<p>Error fetching report data. Please try again later.</p>';
+            });
+    }
+
+    // Extract the report ID from the session
+    fetch('/get-session-evaluation-id')
+        .then(response => response.json())
+        .then(data => {
+            console.log("Session Data:", data); // Debugging information
+            const reportId = data.evaluationId;
+            if (reportId) {
+                getReportData(reportId);
+            } else {
+                alert('No report ID found.');
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching session evaluation ID:', error);
+            const reportContent = document.getElementById('reportContent');
+            reportContent.innerHTML = '<p>Error fetching session evaluation ID. Please try again later.</p>';
+        });
+</script>
 </body>
 </html>

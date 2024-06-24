@@ -3,26 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            width: 100vw;
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+        }
+        .container {
+
+        }
+        .subContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: start;
+            justify-content: start;
+            height: 100vh;
+            padding: 10%;
+        }
+        .subContainer > form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 40vw;
+        }
+        input {
+            padding: 5px;
+            width: 20vw;
+        }
+        button {
+            border-radius: 5px;
+            background-color: #FFFFFF;
+            border: 0.5px solid black;
+            box-shadow: 0 2px 10px rgba(161, 161, 161, 1);
+            font-weight: 500;
+            padding: 1% 5% 1% 5%;
+        }
+        button:hover{
+            cursor: pointer;
+        }
+        .imageContainer {
+            width: 90%;
+            background-color: #092C4C;
+            height: 100vh;
+        }
+    </style>
 </head>
 <body>
-<h1>Login</h1>
-<form th:action="@{/login}" method="post">
-    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-    <div>
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
-    </div>
-    <div>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-    </div>
-    <div>
-        <button type="submit">Login</button>
-    </div>
-</form>
+    <div class="imageContainer">
 
-<div th:if="${param.error}">
-    <p>Incorrect username or password. Please try again.</p>
-</div>
+    </div>
+    <div class="container">
+    <div class="subContainer">
+        <h1>Login</h1>
+        <form th:action="@{/login}" method="post">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+            <div>
+                <input type="text" id="username" name="username" required placeholder="username">
+            </div>
+            <div>
+                <input type="password" id="password" name="password" required placeholder="password">
+            </div>
+            <div>
+                <button type="submit">Login</button>
+            </div>
+        </form>
+
+        <div th:if="${param.error}">
+            <p>Incorrect username or password. Please try again.</p>
+        </div>
+    </div>
+    </div>
 </body>
 </html>

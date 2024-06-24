@@ -5,38 +5,80 @@
     <title>Bucharest Neighborhood Map</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+<!--    <link rel="stylesheet" href="../static/css/style.css"/>-->
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+
+        }
         #map {
             height: 600px;
-            width: 100%;
+            width: 70%;
         }
         #popup {
             display: none;
-            position: absolute;
-            background-color: white;
-            border: 1px solid #ccc;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(161, 161, 161, 1);
+            border: 1px solid #ddd;
             padding: 10px;
-            z-index: 1000;
+            margin-top: 2vh;
+            /*position: absolute;*/
+            /*background-color: white;*/
+            /*border: 1px solid #ccc;*/
+            /*padding: 10px;*/
+            /*z-index: 1000;*/
+        }
+        #neighborhoodForm {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: start;
+        }
+        .mainContainer {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100vw;
+            height: 100%;
+            gap: 10%;
+        }
+        #nextBtn {
+            border-radius: 5px;
+            background-color: #FFFFFF;
+            border: 3px solid #EAEEF4;
+            font-weight: 500;
+            padding: 1% 5% 1% 5%;
+        }
+        #nextBtn:hover {
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-<h1>Bucharest Neighborhood Map</h1>
-<div id="map"></div>
-<div id="popup">
-    <p id="selectedNeighborhood"></p>
-    <button id="nextBtn">Next</button>
+<div class="mainContainer">
+    <h1>Bucharest Neighborhood Map</h1>
+    <div id="map"></div>
+    <div id="popup">
+        <p id="selectedNeighborhood"></p>
+        <button id="nextBtn">Next</button>
+    </div>
 </div>
 
-<form id="neighborhoodForm" action="/save-evaluation" method="post">
-    <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
-    <input type="hidden" id="neighborhoodName" name="areaName" />
-    <input type="hidden" id="tipImobil" name="tipImobil" th:value="${session.preferenceDTO.tipImobil}" />
-    <input type="hidden" id="numarCamere" name="numarCamere" th:value="${session.preferenceDTO.numarCamere}" />
-    <input type="hidden" id="suprafataMinima" name="suprafataMinima" th:value="${session.preferenceDTO.suprafataMinima}" />
-    <input type="hidden" id="anConstructie" name="anConstructie" th:value="${session.preferenceDTO.anConstructie}" />
-    <input type="hidden" id="facilitati" name="facilitati" th:value="${session.preferenceDTO.facilitati}" />
-</form>
+<div style="display: flex; width: 100vw; flex-direction: column; align-items: center; justify-content: center">
+    <form id="neighborhoodForm" action="/save-evaluation" method="post">
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+        <input type="hidden" id="neighborhoodName" name="areaName" />
+        <input type="hidden" id="tipImobil" name="tipImobil" th:value="${session.preferenceDTO.tipImobil}" />
+        <input type="hidden" id="numarCamere" name="numarCamere" th:value="${session.preferenceDTO.numarCamere}" />
+        <input type="hidden" id="suprafataMinima" name="suprafataMinima" th:value="${session.preferenceDTO.suprafataMinima}" />
+        <input type="hidden" id="anConstructie" name="anConstructie" th:value="${session.preferenceDTO.anConstructie}" />
+        <input type="hidden" id="facilitati" name="facilitati" th:value="${session.preferenceDTO.facilitati}" />
+    </form>
+</div>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
@@ -57,7 +99,7 @@
                         selectedNeighborhood = feature.properties.name;
                         document.getElementById('neighborhoodName').value = selectedNeighborhood;
                         document.getElementById('selectedNeighborhood').innerText = 'Ai selectat cartierul ' + selectedNeighborhood;
-                        document.getElementById('popup').style.display = 'block';
+                        document.getElementById('popup').style.display = 'flex';
                     });
                 }
             }).addTo(map);

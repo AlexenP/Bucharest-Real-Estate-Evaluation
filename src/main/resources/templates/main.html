@@ -3,14 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <title>Main Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            width: 100vw;
+            align-items: center;
+            justify-content: center;
+            padding-top: 20vh;
+            overflow: hidden;
+
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: start;
+            height: 50vh;
+            gap: 10%;
+        }
+        button {
+            background-color: #FFFFFF;
+            border: 0;
+            font-weight: 500;
+            padding: 1% 5% 1% 5%;
+        }
+        button:hover{
+            cursor: pointer;
+        }
+
+    </style>
 </head>
 <body>
-<h1>Main Page</h1>
-<p th:if="${param.logout}">You have been logged out successfully.</p>
-<p th:if="${param.success}">Login successful!</p>
+<div class="container">
+    <h1>Main Page</h1>
+    <p th:if="${param.logout}">You have been logged out successfully.</p>
+    <p th:if="${param.success}">Login successful!</p>
 
-<!-- Buttons for creating and viewing reports -->
-<button onclick="window.location.href='/preferinte'">Create Report</button>
-<button onclick="window.location.href='/view-reports'">View Reports</button>
+    <!-- Buttons for creating and viewing reports -->
+    <div style="display: flex; width: 20vw; justify-content: space-between; align-items: center">
+        <button onclick="window.location.href='/preferinte'">Create Report</button>
+        <button onclick="window.location.href='/view-reports'">View Reports</button>
+    </div>
+</div>
 </body>
 </html>

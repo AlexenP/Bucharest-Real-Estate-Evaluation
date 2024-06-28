@@ -24,7 +24,7 @@ public class EvaluationReportDTO {
     private double pretMinimProprietate;
     private double pretMediuProprietate;
     private double pretMaximProprietate;
-    private List<PropertyListing> propertyListings;
+    private List<PropertyListingDTO> propertyListings;
 
     public EvaluationReportDTO(String name, Date date, UserDTO user, AreaDTO area, String type_property, String tipImobil, Integer numarCamere, Integer suprafataMinima, Integer anConstructie, Set<String> facilitati) {
         this.name = name;
@@ -47,11 +47,11 @@ public class EvaluationReportDTO {
         this.pretAjustatPerMp = pretAjustatPerMp;
     }
 
-    public List<PropertyListing> getPropertyListings() {
+    public List<PropertyListingDTO> getPropertyListings() {
         return propertyListings;
     }
 
-    public void setPropertyListings(List<PropertyListing> propertyListings) {
+    public void setPropertyListings(List<PropertyListingDTO> propertyListings) {
         this.propertyListings = propertyListings;
     }
 

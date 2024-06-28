@@ -114,7 +114,7 @@ public class ReportController {
         evaluationReportDTO.setAnConstructie(evaluationEntity.getAnConstructie());
         evaluationReportDTO.setFacilitati(evaluationEntity.getFacilitati());
 
-        // Calcularea prețului ajustat per metru pătrat
+        // Calculating adjusted price per square meter
         double pretMediuPerMp = evaluationEntity.getArea().getPricePerSquareMeter();
         int numarFacilitati = evaluationEntity.getFacilitati().size();
         double ajustarePret = 0;
@@ -127,16 +127,16 @@ public class ReportController {
 
         double pretAjustatPerMp = pretMediuPerMp + ajustarePret;
         evaluationReportDTO.setPretAjustatPerMp(pretAjustatPerMp);
-        evaluationReportDTO.setPretMinimPerMp(pretAjustatPerMp * 0.8);
+        evaluationReportDTO.setPretMinimPerMp(pretAjustatPerMp * 0.92);
         evaluationReportDTO.setPretMaximPerMp(pretAjustatPerMp * 1.08);
 
-        // Calcularea prețurilor proprietății
+        // Calculating property prices
         int suprafataEstimativa = 0;
 
-        if ("Apartament".equalsIgnoreCase(evaluationEntity.getTipImobil())) {
-            suprafataEstimativa = evaluationReportDTO.getNumarCamere() * 23; // Exemplu: 23 mp per cameră
-        } else if ("Casa".equalsIgnoreCase(evaluationEntity.getTipImobil())) {
-            suprafataEstimativa = evaluationReportDTO.getNumarCamere() * 45; // Exemplu: 45 mp per cameră
+        if ("Apartament".equalsIgnoreCase(evaluationReportDTO.getTipImobil())) {
+            suprafataEstimativa = evaluationReportDTO.getNumarCamere() * 23; // Example: 23 mp per room
+        } else if ("Casa".equalsIgnoreCase(evaluationReportDTO.getTipImobil())) {
+            suprafataEstimativa = evaluationReportDTO.getNumarCamere() * 45; // Example: 45 mp per room
         }
 
         double pretMinimProprietate = suprafataEstimativa * evaluationReportDTO.getPretMinimPerMp();
@@ -147,26 +147,31 @@ public class ReportController {
         evaluationReportDTO.setPretMediuProprietate(pretMediuProprietate);
         evaluationReportDTO.setPretMaximProprietate(pretMaximProprietate);
 
-        // Obținerea listărilor de proprietăți
-        List<PropertyListing> propertyListings = fetchPropertyListings(evaluationEntity.getArea().getAreaName());
+        // Getting property listings
+        List<PropertyListingDTO> propertyListings = fetchPropertyListings(evaluationEntity.getArea().getAreaName());
         evaluationReportDTO.setPropertyListings(propertyListings);
 
         return evaluationReportDTO;
     }
 
-
-    private List<PropertyListing> fetchPropertyListings(String areaName) {
-        List<PropertyListing> listings = new ArrayList<>();
+    private List<PropertyListingDTO> fetchPropertyListings(String areaName) {
+        List<PropertyListingDTO> listings = new ArrayList<>();
         String url = "https://www.olx.ro/imobiliare/apartamente-garsoniere-de-vanzare/q-" + areaName + "-Bucuresti/?currency=EUR";
 
         try {
             Document document = Jsoup.connect(url).get();
-            Elements elements = document.select("div[data-cy='l-card']"); // selectorul CSS pentru listări
+            Elements elements = document.select("div[data-cy='l-card']"); // Updated selector
+            System.out.println("Fetched elements: " + elements.size()); // Debugging statement
+
             for (Element element : elements) {
-                String title = element.select("h6").text(); // selectorul CSS pentru titlu
-                String price = element.select("p[data-testid='ad-price']").text(); // selectorul CSS pentru preț
-                String link = element.select("a").attr("href"); // selectorul CSS pentru link
-                listings.add(new PropertyListing(title, price, link));
+                String title = element.select("h6").text(); // Updated selector for title
+                String price = element.select("p[data-testid='ad-price']").text(); // Updated selector for price
+                String link = element.select("a").attr("href"); // Updated selector for link
+                if (!link.startsWith("https")) {
+                    link = "https://www.olx.ro" + link;
+                }
+                System.out.println("Title: " + title + ", Price: " + price + ", Link: " + link); // Debugging statement
+                listings.add(new PropertyListingDTO(title, price, link));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -174,6 +179,7 @@ public class ReportController {
 
         return listings;
     }
+
 
 
 }

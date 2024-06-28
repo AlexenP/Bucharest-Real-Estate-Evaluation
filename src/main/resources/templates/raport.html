@@ -82,23 +82,20 @@
             text-align: right;
         }
         .property-listings {
-            text-align: center;
+            margin-top: 20px;
             padding: 20px;
             background-color: #f2f2f2;
             border-radius: 8px;
-            margin-top: 20px;
+        }
+        .property-listings h2 {
+            margin-bottom: 20px;
         }
         .property-listings ul {
-            list-style: none;
+            list-style-type: none;
             padding: 0;
         }
         .property-listings li {
             margin-bottom: 10px;
-            padding: 10px;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            text-align: left;
         }
     </style>
 </head>
@@ -212,11 +209,16 @@
                 document.getElementById('propertyPriceMax').textContent = data.pretMaximProprietate.toFixed(2) + ' €';
 
                 // Set property listings
-                const propertyListings = document.getElementById('propertyListings');
+                const propertyListingsElement = document.getElementById('propertyListings');
+                propertyListingsElement.innerHTML = '';
                 data.propertyListings.forEach(listing => {
                     const li = document.createElement('li');
-                    li.textContent = listing;
-                    propertyListings.appendChild(li);
+                    const a = document.createElement('a');
+                    a.href = listing.url;
+                    a.textContent = `${listing.title} - ${listing.price}`;
+                    a.target = "_blank"; // Open link in a new tab
+                    li.appendChild(a);
+                    propertyListingsElement.appendChild(li);
                 });
             })
             .catch(error => {
@@ -247,3 +249,4 @@
 
 </body>
 </html>
+

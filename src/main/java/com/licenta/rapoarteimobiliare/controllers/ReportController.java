@@ -1,9 +1,6 @@
 package com.licenta.rapoarteimobiliare.controllers;
 
-import com.licenta.rapoarteimobiliare.DTO.AreaDTO;
-import com.licenta.rapoarteimobiliare.DTO.EvaluationReportDTO;
-import com.licenta.rapoarteimobiliare.DTO.PreferenceDTO;
-import com.licenta.rapoarteimobiliare.DTO.UserDTO;
+import com.licenta.rapoarteimobiliare.DTO.*;
 import com.licenta.rapoarteimobiliare.entities.AreaEntity;
 import com.licenta.rapoarteimobiliare.entities.EvaluationEntity;
 import com.licenta.rapoarteimobiliare.entities.UserEntity;
@@ -23,14 +20,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.servlet.http.HttpSession;
-
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Controller
 public class ReportController {
@@ -139,9 +134,9 @@ public class ReportController {
         int suprafataEstimativa = 0;
 
         if ("Apartament".equalsIgnoreCase(evaluationEntity.getTipImobil())) {
-            suprafataEstimativa = (evaluationEntity.getNumarCamere() != null ? evaluationEntity.getNumarCamere() : 2) * 23; // Exemplu: 23 mp per cameră
+            suprafataEstimativa = evaluationReportDTO.getNumarCamere() * 23; // Exemplu: 23 mp per cameră
         } else if ("Casa".equalsIgnoreCase(evaluationEntity.getTipImobil())) {
-            suprafataEstimativa = (evaluationEntity.getNumarCamere() != null ? evaluationEntity.getNumarCamere() : 2) * 45; // Exemplu: 45 mp per cameră
+            suprafataEstimativa = evaluationReportDTO.getNumarCamere() * 45; // Exemplu: 45 mp per cameră
         }
 
         double pretMinimProprietate = suprafataEstimativa * evaluationReportDTO.getPretMinimPerMp();
@@ -152,30 +147,33 @@ public class ReportController {
         evaluationReportDTO.setPretMediuProprietate(pretMediuProprietate);
         evaluationReportDTO.setPretMaximProprietate(pretMaximProprietate);
 
-        // Obține lista anunțurilor de proprietăți din cartier
-        List<String> propertyListings = getPropertyListings(evaluationEntity.getArea().getAreaName());
+        // Obținerea listărilor de proprietăți
+        List<PropertyListing> propertyListings = fetchPropertyListings(evaluationEntity.getArea().getAreaName());
         evaluationReportDTO.setPropertyListings(propertyListings);
 
         return evaluationReportDTO;
     }
 
-    private List<String> getPropertyListings(String areaName) {
-        List<String> listings = new ArrayList<>();
+
+    private List<PropertyListing> fetchPropertyListings(String areaName) {
+        List<PropertyListing> listings = new ArrayList<>();
+        String url = "https://www.olx.ro/imobiliare/apartamente-garsoniere-de-vanzare/q-" + areaName + "-Bucuresti/?currency=EUR";
+
         try {
-            // Exemplu de URL al unui site de specialitate
-            String url = "https://www.olx.ro/imobiliare/apartamente-garsoniere-de-vanzare/q-"+ areaName+"/?currency=EUR" + areaName;
-
-            Document doc = Jsoup.connect(url).get();
-            Elements elements = doc.select(".listing");
-
+            Document document = Jsoup.connect(url).get();
+            Elements elements = document.select("div[data-cy='l-card']"); // selectorul CSS pentru listări
             for (Element element : elements) {
-                String title = element.select(".listing-title").text();
-                String price = element.select(".listing-price").text();
-                listings.add(title + " - " + price);
+                String title = element.select("h6").text(); // selectorul CSS pentru titlu
+                String price = element.select("p[data-testid='ad-price']").text(); // selectorul CSS pentru preț
+                String link = element.select("a").attr("href"); // selectorul CSS pentru link
+                listings.add(new PropertyListing(title, price, link));
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         return listings;
     }
+
+
 }

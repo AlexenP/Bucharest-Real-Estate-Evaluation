@@ -10,6 +10,10 @@ import com.licenta.rapoarteimobiliare.entities.UserEntity;
 import com.licenta.rapoarteimobiliare.repositories.AreaRepository;
 import com.licenta.rapoarteimobiliare.repositories.EvaluationRepository;
 import com.licenta.rapoarteimobiliare.repositories.UserRepository;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -20,8 +24,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.servlet.http.HttpSession;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -145,7 +152,30 @@ public class ReportController {
         evaluationReportDTO.setPretMediuProprietate(pretMediuProprietate);
         evaluationReportDTO.setPretMaximProprietate(pretMaximProprietate);
 
+        // Obține lista anunțurilor de proprietăți din cartier
+        List<String> propertyListings = getPropertyListings(evaluationEntity.getArea().getAreaName());
+        evaluationReportDTO.setPropertyListings(propertyListings);
+
         return evaluationReportDTO;
     }
 
+    private List<String> getPropertyListings(String areaName) {
+        List<String> listings = new ArrayList<>();
+        try {
+            // Exemplu de URL al unui site de specialitate
+            String url = "https://www.olx.ro/imobiliare/apartamente-garsoniere-de-vanzare/q-"+ areaName+"/?currency=EUR" + areaName;
+
+            Document doc = Jsoup.connect(url).get();
+            Elements elements = doc.select(".listing");
+
+            for (Element element : elements) {
+                String title = element.select(".listing-title").text();
+                String price = element.select(".listing-price").text();
+                listings.add(title + " - " + price);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return listings;
+    }
 }

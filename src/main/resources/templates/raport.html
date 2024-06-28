@@ -36,17 +36,17 @@
         .report-item span {
             margin-left: 10px;
         }
-        .price-analysis {
+        .price-analysis, .property-value-analysis {
             text-align: center;
             padding: 20px;
             background-color: #f2f2f2;
             border-radius: 8px;
             margin-top: 20px;
         }
-        .price-analysis h2 {
+        .price-analysis h2, .property-value-analysis h2 {
             margin-bottom: 20px;
         }
-        .price-bar {
+        .price-bar, .property-value-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -57,71 +57,48 @@
             position: relative;
             color: black;
         }
-        .price-bar div {
+        .price-bar div, .property-value-bar div {
             text-align: center;
             position: relative;
         }
-        .price-bar .price-middle {
+        .price-bar .price-middle, .property-value-bar .price-middle {
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
         }
-        .price-labels {
+        .price-labels, .property-value-labels {
             display: flex;
             justify-content: space-between;
             margin-top: 10px;
         }
-        .price-labels div {
+        .price-labels div, .property-value-labels div {
             width: 33%;
             font-weight: bold;
         }
-        .price-left-label {
+        .price-left-label, .property-value-left-label {
             text-align: left;
         }
-        .price-right-label {
+        .price-right-label, .property-value-right-label {
             text-align: right;
         }
-        .property-value-analysis {
+        .property-listings {
             text-align: center;
             padding: 20px;
             background-color: #f2f2f2;
             border-radius: 8px;
             margin-top: 20px;
         }
-        .property-value-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: linear-gradient(to right, green, yellow, red);
-            border-radius: 8px;
-            padding: 10px;
+        .property-listings ul {
+            list-style: none;
+            padding: 0;
+        }
+        .property-listings li {
             margin-bottom: 10px;
-            position: relative;
-            color: black;
-        }
-        .property-value-bar div {
-            text-align: center;
-            position: relative;
-        }
-        .property-value-bar .price-middle {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-        .property-value-labels {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
-        }
-        .property-value-labels div {
-            width: 33%;
-            font-weight: bold;
-        }
-        .property-value-left-label {
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
             text-align: left;
-        }
-        .property-value-right-label {
-            text-align: right;
         }
     </style>
 </head>
@@ -169,6 +146,13 @@
             <div class="property-value-middle-label">Adjusted Property Value</div>
             <div class="property-value-right-label">Max Property Value</div>
         </div>
+    </div>
+
+    <div class="property-listings">
+        <h2>Property Listings</h2>
+        <ul id="propertyListings">
+            <!-- Property listings will be dynamically inserted here -->
+        </ul>
     </div>
 </div>
 
@@ -226,6 +210,14 @@
                 document.getElementById('propertyPriceMin').textContent = data.pretMinimProprietate.toFixed(2) + ' €';
                 document.getElementById('propertyPriceAdjust').textContent = data.pretMediuProprietate.toFixed(2) + ' €';
                 document.getElementById('propertyPriceMax').textContent = data.pretMaximProprietate.toFixed(2) + ' €';
+
+                // Set property listings
+                const propertyListings = document.getElementById('propertyListings');
+                data.propertyListings.forEach(listing => {
+                    const li = document.createElement('li');
+                    li.textContent = listing;
+                    propertyListings.appendChild(li);
+                });
             })
             .catch(error => {
                 console.error('Error fetching report data:', error);

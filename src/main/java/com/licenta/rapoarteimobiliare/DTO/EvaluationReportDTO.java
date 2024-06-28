@@ -3,6 +3,7 @@ package com.licenta.rapoarteimobiliare.DTO;
 
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 public class EvaluationReportDTO {
@@ -23,6 +24,8 @@ public class EvaluationReportDTO {
     private double pretMinimProprietate;
     private double pretMediuProprietate;
     private double pretMaximProprietate;
+    private List<String> propertyListings;
+
     public EvaluationReportDTO(String name, Date date, UserDTO user, AreaDTO area, String type_property, String tipImobil, Integer numarCamere, Integer suprafataMinima, Integer anConstructie, Set<String> facilitati) {
         this.name = name;
         this.date = date;
@@ -42,6 +45,14 @@ public class EvaluationReportDTO {
 
     public void setPretAjustatPerMp(double pretAjustatPerMp) {
         this.pretAjustatPerMp = pretAjustatPerMp;
+    }
+
+    public List<String> getPropertyListings() {
+        return propertyListings;
+    }
+
+    public void setPropertyListings(List<String> propertyListings) {
+        this.propertyListings = propertyListings;
     }
 
     public double getPretMinimPerMp() {

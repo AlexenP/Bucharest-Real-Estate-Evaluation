@@ -22,10 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 public class ReportController {
@@ -139,9 +136,33 @@ public class ReportController {
             suprafataEstimativa = evaluationReportDTO.getNumarCamere() * 45; // Example: 45 mp per room
         }
 
+        // Update suprafataEstimativa based on suprafataMinima
+        if (evaluationReportDTO.getSuprafataMinima() != null && evaluationReportDTO.getSuprafataMinima() > suprafataEstimativa) {
+            suprafataEstimativa = evaluationReportDTO.getSuprafataMinima();
+        }
+
         double pretMinimProprietate = suprafataEstimativa * evaluationReportDTO.getPretMinimPerMp();
         double pretMediuProprietate = suprafataEstimativa * evaluationReportDTO.getPretAjustatPerMp();
         double pretMaximProprietate = suprafataEstimativa * evaluationReportDTO.getPretMaximPerMp();
+
+        // Adjust property prices based on the age of the construction
+        if (evaluationEntity.getAnConstructie() != null) {
+            int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+            int age = currentYear - evaluationEntity.getAnConstructie();
+            double ageAdjustment = 0;
+
+            if (age < 10) {
+                ageAdjustment = 0.20;
+            } else if (age < 15) {
+                ageAdjustment = 0.15;
+            } else if (age < 20) {
+                ageAdjustment = 0.10;
+            }
+
+            pretMinimProprietate *= (1 + ageAdjustment);
+            pretMediuProprietate *= (1 + ageAdjustment);
+            pretMaximProprietate *= (1 + ageAdjustment);
+        }
 
         evaluationReportDTO.setPretMinimProprietate(pretMinimProprietate);
         evaluationReportDTO.setPretMediuProprietate(pretMediuProprietate);
@@ -170,7 +191,6 @@ public class ReportController {
                 if (!link.startsWith("https")) {
                     link = "https://www.olx.ro" + link;
                 }
-                System.out.println("Title: " + title + ", Price: " + price + ", Link: " + link); // Debugging statement
                 listings.add(new PropertyListingDTO(title, price, link));
             }
         } catch (IOException e) {

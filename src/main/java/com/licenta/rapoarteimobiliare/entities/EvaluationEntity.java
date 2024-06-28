@@ -24,7 +24,7 @@ public class EvaluationEntity {
     private AreaEntity area;
 
     // Casa sau Apartament
-
+    // todo Clasa Imobil
     private String tipImobil;
 
     private Integer numarCamere;
@@ -35,8 +35,7 @@ public class EvaluationEntity {
 
     @ElementCollection
     private Set<String> facilitati;
-
-    // Getters and Setters
+    // todo end clasa Imobil
 
     public int getEvaluationId() {
         return evaluationId;

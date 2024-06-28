@@ -7,11 +7,18 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
         }
         .container {
-            width: 50%;
+            width: 60%;
             margin: 0 auto;
             padding-top: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
         }
         .report-section {
             margin-bottom: 20px;
@@ -29,6 +36,93 @@
         .report-item span {
             margin-left: 10px;
         }
+        .price-analysis {
+            text-align: center;
+            padding: 20px;
+            background-color: #f2f2f2;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .price-analysis h2 {
+            margin-bottom: 20px;
+        }
+        .price-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(to right, green, yellow, red);
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+            position: relative;
+            color: black;
+        }
+        .price-bar div {
+            text-align: center;
+            position: relative;
+        }
+        .price-bar .price-middle {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .price-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        .price-labels div {
+            width: 33%;
+            font-weight: bold;
+        }
+        .price-left-label {
+            text-align: left;
+        }
+        .price-right-label {
+            text-align: right;
+        }
+        .property-value-analysis {
+            text-align: center;
+            padding: 20px;
+            background-color: #f2f2f2;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .property-value-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(to right, green, yellow, red);
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+            position: relative;
+            color: black;
+        }
+        .property-value-bar div {
+            text-align: center;
+            position: relative;
+        }
+        .property-value-bar .price-middle {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .property-value-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        .property-value-labels div {
+            width: 33%;
+            font-weight: bold;
+        }
+        .property-value-left-label {
+            text-align: left;
+        }
+        .property-value-right-label {
+            text-align: right;
+        }
     </style>
 </head>
 <body>
@@ -36,6 +130,45 @@
     <h1>Report</h1>
     <div id="reportContent">
         <!-- Report content will be dynamically inserted here -->
+    </div>
+    <div class="price-analysis">
+        <h2>Price Analysis</h2>
+        <div class="price-bar">
+            <div class="price-left">
+                <span id="priceMin"></span>
+            </div>
+            <div class="price-middle">
+                <span id="priceAdjust"></span>
+            </div>
+            <div class="price-right">
+                <span id="priceMax"></span>
+            </div>
+        </div>
+        <div class="price-labels">
+            <div class="price-left-label">Min Price</div>
+            <div class="price-middle-label">Adjusted Price</div>
+            <div class="price-right-label">Max Price</div>
+        </div>
+    </div>
+
+    <div class="property-value-analysis">
+        <h2>Estimated Property Value</h2>
+        <div class="property-value-bar">
+            <div class="price-left">
+                <span id="propertyPriceMin"></span>
+            </div>
+            <div class="price-middle">
+                <span id="propertyPriceAdjust"></span>
+            </div>
+            <div class="price-right">
+                <span id="propertyPriceMax"></span>
+            </div>
+        </div>
+        <div class="property-value-labels">
+            <div class="property-value-left-label">Min Property Value</div>
+            <div class="property-value-middle-label">Adjusted Property Value</div>
+            <div class="property-value-right-label">Max Property Value</div>
+        </div>
     </div>
 </div>
 
@@ -83,6 +216,16 @@
                     reportSection.appendChild(value);
                     reportContent.appendChild(reportSection);
                 });
+
+                // Set price values in the price bar
+                document.getElementById('priceMin').textContent = data.pretMinimPerMp.toFixed(2) + ' €/mp';
+                document.getElementById('priceAdjust').textContent = data.pretAjustatPerMp.toFixed(2) + ' €/mp';
+                document.getElementById('priceMax').textContent = data.pretMaximPerMp.toFixed(2) + ' €/mp';
+
+                // Set property price values in the property value bar
+                document.getElementById('propertyPriceMin').textContent = data.pretMinimProprietate.toFixed(2) + ' €';
+                document.getElementById('propertyPriceAdjust').textContent = data.pretMediuProprietate.toFixed(2) + ' €';
+                document.getElementById('propertyPriceMax').textContent = data.pretMaximProprietate.toFixed(2) + ' €';
             })
             .catch(error => {
                 console.error('Error fetching report data:', error);

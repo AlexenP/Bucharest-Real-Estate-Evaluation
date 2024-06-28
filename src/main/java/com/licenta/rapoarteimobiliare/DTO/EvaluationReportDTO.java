@@ -16,7 +16,13 @@ public class EvaluationReportDTO {
     private Integer suprafataMinima;
     private Integer anConstructie;
     private Set<String> facilitati;
+    private double pretAjustatPerMp;
+    private double pretMinimPerMp;
+    private double pretMaximPerMp;
 
+    private double pretMinimProprietate;
+    private double pretMediuProprietate;
+    private double pretMaximProprietate;
     public EvaluationReportDTO(String name, Date date, UserDTO user, AreaDTO area, String type_property, String tipImobil, Integer numarCamere, Integer suprafataMinima, Integer anConstructie, Set<String> facilitati) {
         this.name = name;
         this.date = date;
@@ -30,6 +36,29 @@ public class EvaluationReportDTO {
         this.facilitati = facilitati;
     }
 
+    public double getPretAjustatPerMp() {
+        return pretAjustatPerMp;
+    }
+
+    public void setPretAjustatPerMp(double pretAjustatPerMp) {
+        this.pretAjustatPerMp = pretAjustatPerMp;
+    }
+
+    public double getPretMinimPerMp() {
+        return pretMinimPerMp;
+    }
+
+    public void setPretMinimPerMp(double pretMinimPerMp) {
+        this.pretMinimPerMp = pretMinimPerMp;
+    }
+
+    public double getPretMaximPerMp() {
+        return pretMaximPerMp;
+    }
+
+    public void setPretMaximPerMp(double pretMaximPerMp) {
+        this.pretMaximPerMp = pretMaximPerMp;
+    }
     public EvaluationReportDTO() {
     }
 
@@ -111,6 +140,30 @@ public class EvaluationReportDTO {
 
     public void setFacilitati(Set<String> facilitati) {
         this.facilitati = facilitati;
+    }
+
+    public double getPretMinimProprietate() {
+        return pretMinimProprietate;
+    }
+
+    public void setPretMinimProprietate(double pretMinimProprietate) {
+        this.pretMinimProprietate = pretMinimProprietate;
+    }
+
+    public double getPretMediuProprietate() {
+        return pretMediuProprietate;
+    }
+
+    public void setPretMediuProprietate(double pretMediuProprietate) {
+        this.pretMediuProprietate = pretMediuProprietate;
+    }
+
+    public double getPretMaximProprietate() {
+        return pretMaximProprietate;
+    }
+
+    public void setPretMaximProprietate(double pretMaximProprietate) {
+        this.pretMaximProprietate = pretMaximProprietate;
     }
 }
 

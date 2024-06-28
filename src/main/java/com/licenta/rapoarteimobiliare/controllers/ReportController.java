@@ -127,7 +127,7 @@ public class ReportController {
 
         double pretAjustatPerMp = pretMediuPerMp + ajustarePret;
         evaluationReportDTO.setPretAjustatPerMp(pretAjustatPerMp);
-        evaluationReportDTO.setPretMinimPerMp(pretAjustatPerMp * 0.92);
+        evaluationReportDTO.setPretMinimPerMp(pretAjustatPerMp * 0.8);
         evaluationReportDTO.setPretMaximPerMp(pretAjustatPerMp * 1.08);
 
         // Calcularea prețurilor proprietății

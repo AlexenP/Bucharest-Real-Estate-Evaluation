@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>View Reports</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 60%;
+            margin: 0 auto;
+            padding-top: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+        }
+        .report-item {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f2f2f2;
+            cursor: pointer;
+        }
+        .report-item:hover {
+            background-color: #e9e9e9;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Reports</h1>
+    <div th:if="${message}">
+        <p th:text="${message}"></p>
+    </div>
+    <div th:if="${reports}" th:each="report : ${reports}">
+        <div class="report-item" th:text="${report.name}" th:onclick="'window.location.href=\'/raport?id=' + ${report.id} + '\''">
+            <p><strong th:text="${report.name}"></strong> - <span th:text="${#dates.format(report.date, 'dd/MM/yyyy')}"></span></p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

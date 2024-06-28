@@ -25,6 +25,7 @@ public class EvaluationReportDTO {
     private double pretMediuProprietate;
     private double pretMaximProprietate;
     private List<PropertyListingDTO> propertyListings;
+    private Integer id;
 
     public EvaluationReportDTO(String name, Date date, UserDTO user, AreaDTO area, String type_property, String tipImobil, Integer numarCamere, Integer suprafataMinima, Integer anConstructie, Set<String> facilitati) {
         this.name = name;
@@ -37,6 +38,14 @@ public class EvaluationReportDTO {
         this.suprafataMinima = suprafataMinima;
         this.anConstructie = anConstructie;
         this.facilitati = facilitati;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public double getPretAjustatPerMp() {

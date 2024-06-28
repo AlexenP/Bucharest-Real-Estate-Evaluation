@@ -14,6 +14,7 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,7 +23,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class ReportController {
@@ -136,7 +140,7 @@ public class ReportController {
             suprafataEstimativa = evaluationReportDTO.getNumarCamere() * 45; // Example: 45 mp per room
         }
 
-        // Update suprafataEstimativa based on suprafataMinima
+        // Apply minimum surface adjustment if necessary
         if (evaluationReportDTO.getSuprafataMinima() != null && evaluationReportDTO.getSuprafataMinima() > suprafataEstimativa) {
             suprafataEstimativa = evaluationReportDTO.getSuprafataMinima();
         }
@@ -145,20 +149,18 @@ public class ReportController {
         double pretMediuProprietate = suprafataEstimativa * evaluationReportDTO.getPretAjustatPerMp();
         double pretMaximProprietate = suprafataEstimativa * evaluationReportDTO.getPretMaximPerMp();
 
-        // Adjust property prices based on the age of the construction
+        // Apply age-based adjustments
         if (evaluationEntity.getAnConstructie() != null) {
-            int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+            int currentYear = new Date().getYear() + 1900;
             int age = currentYear - evaluationEntity.getAnConstructie();
             double ageAdjustment = 0;
-
             if (age < 10) {
-                ageAdjustment = 0.20;
+                ageAdjustment = 0.20; // Increase by 20%
             } else if (age < 15) {
-                ageAdjustment = 0.15;
+                ageAdjustment = 0.15; // Increase by 15%
             } else if (age < 20) {
-                ageAdjustment = 0.10;
+                ageAdjustment = 0.10; // Increase by 10%
             }
-
             pretMinimProprietate *= (1 + ageAdjustment);
             pretMediuProprietate *= (1 + ageAdjustment);
             pretMaximProprietate *= (1 + ageAdjustment);
@@ -200,6 +202,26 @@ public class ReportController {
         return listings;
     }
 
+    @GetMapping("/view-reports")
+    public String viewReports(Authentication authentication, Model model) {
+        UserEntity user = userRepository.findByUsername(authentication.getName());
+        List<EvaluationEntity> evaluations = evaluationRepository.findByUser(user);
 
+        if (evaluations.isEmpty()) {
+            model.addAttribute("message", "Nu exista niciun raport creat.");
+        } else {
+            List<EvaluationReportDTO> evaluationReportDTOs = new ArrayList<>();
+            for (EvaluationEntity evaluation : evaluations) {
+                EvaluationReportDTO evaluationReportDTO = new EvaluationReportDTO();
+                evaluationReportDTO.setName(evaluation.getName());
+                evaluationReportDTO.setDate(evaluation.getDate());
+                evaluationReportDTO.setId(evaluation.getEvaluationId());
+                evaluationReportDTOs.add(evaluationReportDTO);
+            }
+            model.addAttribute("reports", evaluationReportDTOs);
+        }
 
+        return "view-reports";
+    }
 }
+

@@ -18,8 +18,6 @@ public class MainController {
         return "preferinte";
     }
 
-
-
     @GetMapping("/map")
     public String mapPage() {
         return "map";
@@ -29,12 +27,6 @@ public class MainController {
     @GetMapping("/raport")
     public String raportPage() {
         return "raport";
-    }
-
-    @GetMapping("/view-reports")
-    public String viewReportsPage() {
-        // Logic to display the reports
-        return "view-reports";
     }
 
     @GetMapping("/home")

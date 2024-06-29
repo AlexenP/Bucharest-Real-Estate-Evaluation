@@ -74,7 +74,7 @@ public class ReportController {
         // Store the evaluation ID in session
         session.setAttribute("currentEvaluationId", evaluation.getEvaluationId());
 
-        return "redirect:/raport";
+        return "redirect:/raport?id=" + evaluation.getEvaluationId(); // Redirect to the report page with the ID
     }
 
     @GetMapping("/get-session-evaluation-id")
@@ -140,31 +140,9 @@ public class ReportController {
             suprafataEstimativa = evaluationReportDTO.getNumarCamere() * 45; // Example: 45 mp per room
         }
 
-        // Apply minimum surface adjustment if necessary
-        if (evaluationReportDTO.getSuprafataMinima() != null && evaluationReportDTO.getSuprafataMinima() > suprafataEstimativa) {
-            suprafataEstimativa = evaluationReportDTO.getSuprafataMinima();
-        }
-
         double pretMinimProprietate = suprafataEstimativa * evaluationReportDTO.getPretMinimPerMp();
         double pretMediuProprietate = suprafataEstimativa * evaluationReportDTO.getPretAjustatPerMp();
         double pretMaximProprietate = suprafataEstimativa * evaluationReportDTO.getPretMaximPerMp();
-
-        // Apply age-based adjustments
-        if (evaluationEntity.getAnConstructie() != null) {
-            int currentYear = new Date().getYear() + 1900;
-            int age = currentYear - evaluationEntity.getAnConstructie();
-            double ageAdjustment = 0;
-            if (age < 10) {
-                ageAdjustment = 0.20; // Increase by 20%
-            } else if (age < 15) {
-                ageAdjustment = 0.15; // Increase by 15%
-            } else if (age < 20) {
-                ageAdjustment = 0.10; // Increase by 10%
-            }
-            pretMinimProprietate *= (1 + ageAdjustment);
-            pretMediuProprietate *= (1 + ageAdjustment);
-            pretMaximProprietate *= (1 + ageAdjustment);
-        }
 
         evaluationReportDTO.setPretMinimProprietate(pretMinimProprietate);
         evaluationReportDTO.setPretMediuProprietate(pretMediuProprietate);
@@ -201,27 +179,4 @@ public class ReportController {
 
         return listings;
     }
-
-    @GetMapping("/view-reports")
-    public String viewReports(Authentication authentication, Model model) {
-        UserEntity user = userRepository.findByUsername(authentication.getName());
-        List<EvaluationEntity> evaluations = evaluationRepository.findByUser(user);
-
-        if (evaluations.isEmpty()) {
-            model.addAttribute("message", "Nu exista niciun raport creat.");
-        } else {
-            List<EvaluationReportDTO> evaluationReportDTOs = new ArrayList<>();
-            for (EvaluationEntity evaluation : evaluations) {
-                EvaluationReportDTO evaluationReportDTO = new EvaluationReportDTO();
-                evaluationReportDTO.setName(evaluation.getName());
-                evaluationReportDTO.setDate(evaluation.getDate());
-                evaluationReportDTO.setId(evaluation.getEvaluationId());
-                evaluationReportDTOs.add(evaluationReportDTO);
-            }
-            model.addAttribute("reports", evaluationReportDTOs);
-        }
-
-        return "view-reports";
-    }
 }
-

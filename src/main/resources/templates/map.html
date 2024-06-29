@@ -5,55 +5,74 @@
     <title>Bucharest Neighborhood Map</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
-<!--    <link rel="stylesheet" href="../static/css/styleRaport.css"/>-->
     <style>
         body {
             font-family: Arial, sans-serif;
-            overflow: hidden;
-
-        }
-        #map {
-            height: 600px;
-            width: 70%;
-        }
-        #popup {
-            display: none;
-            flex-direction: column;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 2px 10px rgba(161, 161, 161, 1);
-            border: 1px solid #ddd;
-            padding: 10px;
-            margin-top: 2vh;
-            /*position: absolute;*/
-            /*background-color: white;*/
-            /*border: 1px solid #ccc;*/
-            /*padding: 10px;*/
-            /*z-index: 1000;*/
-        }
-        #neighborhoodForm {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: start;
+            height: 100vh;
         }
         .mainContainer {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            width: 100vw;
-            height: 100%;
-            gap: 10%;
+            width: 80%;
+            max-width: 1200px;
+            height: auto;
+            gap: 2rem;
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        #map {
+            height: 60vh;
+            width: 100%;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+        #popup {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ddd;
+            padding: 1rem;
+            margin-top: 1rem;
+            background-color: white;
+            border-radius: 5px;
+        }
+        #neighborhoodForm {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
         #nextBtn {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            font-weight: bold;
             border-radius: 5px;
-            background-color: #FFFFFF;
-            border: 3px solid #EAEEF4;
-            font-weight: 500;
-            padding: 1% 5% 1% 5%;
+            transition: background-color 0.3s ease;
+            margin-top: 1rem;
         }
         #nextBtn:hover {
+            background-color: #0056b3;
             cursor: pointer;
         }
     </style>
@@ -68,17 +87,15 @@
     </div>
 </div>
 
-<div style="display: flex; width: 100vw; flex-direction: column; align-items: center; justify-content: center">
-    <form id="neighborhoodForm" action="/save-evaluation" method="post">
-        <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
-        <input type="hidden" id="neighborhoodName" name="areaName" />
-        <input type="hidden" id="tipImobil" name="tipImobil" th:value="${session.preferenceDTO.tipImobil}" />
-        <input type="hidden" id="numarCamere" name="numarCamere" th:value="${session.preferenceDTO.numarCamere}" />
-        <input type="hidden" id="suprafataMinima" name="suprafataMinima" th:value="${session.preferenceDTO.suprafataMinima}" />
-        <input type="hidden" id="anConstructie" name="anConstructie" th:value="${session.preferenceDTO.anConstructie}" />
-        <input type="hidden" id="facilitati" name="facilitati" th:value="${session.preferenceDTO.facilitati}" />
-    </form>
-</div>
+<form id="neighborhoodForm" action="/save-evaluation" method="post" style="display: none;">
+    <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+    <input type="hidden" id="neighborhoodName" name="areaName" />
+    <input type="hidden" id="tipImobil" name="tipImobil" th:value="${session.preferenceDTO.tipImobil}" />
+    <input type="hidden" id="numarCamere" name="numarCamere" th:value="${session.preferenceDTO.numarCamere}" />
+    <input type="hidden" id="suprafataMinima" name="suprafataMinima" th:value="${session.preferenceDTO.suprafataMinima}" />
+    <input type="hidden" id="anConstructie" name="anConstructie" th:value="${session.preferenceDTO.anConstructie}" />
+    <input type="hidden" id="facilitati" name="facilitati" th:value="${session.preferenceDTO.facilitati}" />
+</form>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>

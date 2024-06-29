@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const interval = (maxPrice - minPrice) / 10; // Changed to 10 intervals
 
         const priceRanges = [];
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 10; i++) { // Changed to 10 intervals
             priceRanges.push([minPrice + i * interval, minPrice + (i + 1) * interval]);
         }
 
@@ -134,3 +134,4 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 });
+

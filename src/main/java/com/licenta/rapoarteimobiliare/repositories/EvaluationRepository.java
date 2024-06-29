@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface EvaluationRepository extends JpaRepository<EvaluationEntity, Integer> {
     List<EvaluationEntity> findByUser(UserEntity user);
+
+    List<EvaluationEntity> findByUserUsername(String username);
 }

@@ -28,7 +28,7 @@
         }
         input {
             padding: 10px;
-            width: 25vw;
+            width: 206px;
             border: 1px solid #ccc;
             border-radius: 5px;
             box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -49,6 +49,16 @@
         button:hover{
             cursor: pointer;
         }
+
+        .create-account {
+            background-color: white;
+            color: #007BFF;
+            border: 1px solid #007BFF;
+        }
+
+        .create-account:hover {
+            background-color: #f0f0f0;
+        }
         .imageContainer {
             width: 90%;
             background-image: url('/content/background/background.png');
@@ -61,13 +71,14 @@
         h1 {
             text-align: center;
         }
+
     </style>
 </head>
 <body>
-    <div class="imageContainer">
+<div class="imageContainer">
 
-    </div>
-    <div class="container">
+</div>
+<div class="container">
     <div class="subContainer">
         <h1>Login</h1>
         <form th:action="@{/login}" method="post">
@@ -81,12 +92,18 @@
             <div>
                 <button type="submit">Login</button>
             </div>
+            <div style="width: 227px; height: fit-content; padding: 0; text-align: center">
+                <p style="margin: 0">or</p>
+            </div>
+            <div>
+                <button type="button" class="create-account" onclick="window.location.href='/register'">Create a new account</button>
+            </div>
         </form>
 
         <div th:if="${param.error}">
             <p>Incorrect username or password. Please try again.</p>
         </div>
     </div>
-    </div>
+</div>
 </body>
 </html>

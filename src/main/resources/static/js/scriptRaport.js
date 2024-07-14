@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     { label: 'Date', value: new Date(data.date).toLocaleDateString() },
                     { label: 'User', value: data.user ? data.user.username : 'N/A' },
                     { label: 'Area', value: data.area ? data.area.areaName : 'N/A' },
-                    { label: 'Tip Imobil', value: data.tipImobil },
+                    { label: 'Type of property', value: data.tipImobil },
                     { label: 'Number of Rooms', value: data.numarCamere },
                     { label: 'Minimum Surface', value: data.suprafataMinima },
                     { label: 'Year of Construction', value: data.anConstructie },
@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     reportSection.classList.add('report-section');
 
                     const label = document.createElement('label');
-                    label.textContent = section.label + ':';
+                    label.textContent = section.label + ': ';
 
                     const value = document.createElement('span');
                     value.textContent = section.value !== undefined ? section.value : 'N/A';
@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const interval = (maxPrice - minPrice) / 10; // Changed to 10 intervals
 
         const priceRanges = [];
-        for (let i = 0; i < 10; i++) { // Changed to 10 intervals
+        for (let i = 0; i < 10; i++) {
             priceRanges.push([minPrice + i * interval, minPrice + (i + 1) * interval]);
         }
 
@@ -105,7 +105,7 @@ document.addEventListener("DOMContentLoaded", function() {
         new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: priceRanges.map(range => `${range[0].toFixed(2)} - ${range[1].toFixed(2)} €`),
+                labels: priceRanges.map(range => `${range[0].toFixed(0)} - ${range[1].toFixed(0)} €`),
                 datasets: [{
                     label: 'Number of Properties',
                     data: priceCounts,

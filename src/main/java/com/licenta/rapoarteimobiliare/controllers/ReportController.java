@@ -128,16 +128,16 @@ public class ReportController {
 
         double pretAjustatPerMp = pretMediuPerMp + ajustarePret;
         evaluationReportDTO.setPretAjustatPerMp(pretAjustatPerMp);
-        evaluationReportDTO.setPretMinimPerMp(pretAjustatPerMp * 0.92);
-        evaluationReportDTO.setPretMaximPerMp(pretAjustatPerMp * 1.08);
+        evaluationReportDTO.setPretMinimPerMp(pretAjustatPerMp * 0.7);
+        evaluationReportDTO.setPretMaximPerMp(pretAjustatPerMp * 1.3);
 
         // Calculating property prices
         int suprafataEstimativa = 0;
 
         if ("Apartament".equalsIgnoreCase(evaluationReportDTO.getTipImobil())) {
-            suprafataEstimativa = evaluationReportDTO.getNumarCamere() * 23; // Example: 23 mp per room
+            suprafataEstimativa = evaluationReportDTO.getNumarCamere() * 23;
         } else if ("Casa".equalsIgnoreCase(evaluationReportDTO.getTipImobil())) {
-            suprafataEstimativa = evaluationReportDTO.getNumarCamere() * 45; // Example: 45 mp per room
+            suprafataEstimativa = evaluationReportDTO.getNumarCamere() * 45;
         }
 
         double pretMinimProprietate = suprafataEstimativa * evaluationReportDTO.getPretMinimPerMp();
@@ -157,7 +157,8 @@ public class ReportController {
 
     private List<PropertyListingDTO> fetchPropertyListings(String areaName) {
         List<PropertyListingDTO> listings = new ArrayList<>();
-        String url = "https://www.olx.ro/imobiliare/apartamente-garsoniere-de-vanzare/q-" + areaName + "-Bucuresti/?currency=EUR";
+        String url = "https://www.olx.ro/imobiliare/apartamente-garsoniere-de-vanzare/q-" + areaName +
+                "-Bucuresti/?currency=EUR";
 
         try {
             Document document = Jsoup.connect(url).get();

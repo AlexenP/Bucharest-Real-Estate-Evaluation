@@ -21,12 +21,15 @@ document.addEventListener('DOMContentLoaded', function() {
     function toggleNewField() {
         const action = document.getElementById('action').value;
         const newValueDiv = document.getElementById('newValueDiv');
+        const newValueInput = document.getElementById('newValue');
         if (action === 'username') {
             newValueDiv.style.display = 'block';
-            document.getElementById('newValue').placeholder = "New Username";
+            newValueInput.type = 'text';
+            newValueInput.placeholder = "New Username";
         } else if (action === 'password') {
             newValueDiv.style.display = 'block';
-            document.getElementById('newValue').placeholder = "New Password";
+            newValueInput.type = 'password';
+            newValueInput.placeholder = "New Password";
         }
     }
 
@@ -91,4 +94,5 @@ document.addEventListener('DOMContentLoaded', function() {
     window.closeModal = closeModal;
     window.modifyUser = modifyUser;
     window.deleteUser = deleteUser;
+    window.toggleNewField = toggleNewField;
 });

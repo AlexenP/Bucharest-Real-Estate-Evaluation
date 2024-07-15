@@ -130,6 +130,11 @@
     <div th:if="${success}" class="success">
         <p th:text="${success}"></p>
     </div>
+
+    <!-- Display error message -->
+    <div th:if="${errorMessage}" class="error">
+        <p th:text="${errorMessage}"></p>
+    </div>
 </div>
 </body>
 </html>

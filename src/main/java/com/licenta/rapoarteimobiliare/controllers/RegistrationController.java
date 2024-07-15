@@ -44,6 +44,11 @@ public class RegistrationController {
             return "redirect:/register";
         }
 
+        if (userRepository.findByUsername(username) != null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Username already exists!");
+            return "redirect:/register";
+        }
+
         UserEntity user = new UserEntity();
         user.setUsername(username);
         user.setPassword(passwordEncoder.encode(password));  // Encode password

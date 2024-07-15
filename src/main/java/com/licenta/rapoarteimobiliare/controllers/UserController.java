@@ -1,6 +1,8 @@
 package com.licenta.rapoarteimobiliare.controllers;
 
+import com.licenta.rapoarteimobiliare.entities.EvaluationEntity;
 import com.licenta.rapoarteimobiliare.entities.UserEntity;
+import com.licenta.rapoarteimobiliare.repositories.EvaluationRepository;
 import com.licenta.rapoarteimobiliare.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,9 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private EvaluationRepository evaluationRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -71,6 +76,11 @@ public class UserController {
         Map<String, Object> response = new HashMap<>();
         try {
             UserEntity user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+
+            // Manually delete related entities
+            List<EvaluationEntity> evaluations = evaluationRepository.findByUser(user);
+            evaluationRepository.deleteAll(evaluations);
+
             userRepository.delete(user);
             response.put("success", true);
         } catch (Exception e) {

@@ -35,7 +35,6 @@ public class EvaluationEntity {
 
     @ElementCollection
     private Set<String> facilitati;
-    // todo end clasa Imobil
 
     public int getEvaluationId() {
         return evaluationId;

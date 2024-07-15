@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
         var userId = document.getElementById('deleteUserId').value;
 
         var xhr = new XMLHttpRequest();
-        xhr.open("DELETE", "/delete-user/" + userId, true);
+        xhr.open("POST", "/delete-user/" + userId, true); // Change DELETE to POST
         xhr.setRequestHeader('X-CSRF-TOKEN', document.querySelector('input[name="_csrf"]').value);
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4) {

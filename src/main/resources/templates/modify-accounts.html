@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Modify Accounts</title>
+    <link rel="stylesheet" href="/css/styleModifyAccounts.css">
+</head>
+<body>
+<div class="container">
+    <h1>Modify Accounts</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>Username</th>
+            <th>Role</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}" th:unless="${#authentication.name.equals(user.username)}">
+            <td th:text="${user.username}">Username</td>
+            <td th:text="${user.authorities[0]?.authority}">Role</td>
+            <td>
+                <button class="modify-button" th:attr="onclick=|openModifyModal('${user.userId}', '${user.username}')|">Modify</button>
+                <button class="delete-button" th:attr="onclick=|openDeleteModal('${user.userId}')|">Delete</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Modify Modal -->
+<div id="modifyModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModifyModal()">&times;</span>
+        <h2>Modify User</h2>
+        <label for="modify-username">Username:</label>
+        <input type="text" id="modify-username" readonly>
+        <label for="modify-old-password">Old Password:</label>
+        <input type="password" id="modify-old-password">
+        <label for="modify-action">Action:</label>
+        <select id="modify-action" onchange="toggleNewField()">
+            <option value="username">Change Username</option>
+            <option value="password">Change Password</option>
+        </select>
+        <div id="new-username-div">
+            <label for="modify-new-username">New Username:</label>
+            <input type="text" id="modify-new-username">
+        </div>
+        <div id="new-password-div" style="display:none;">
+            <label for="modify-new-password">New Password:</label>
+            <input type="password" id="modify-new-password">
+        </div>
+        <button onclick="submitModify()">Submit</button>
+    </div>
+</div>
+
+<!-- Delete Modal -->
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeDeleteModal()">&times;</span>
+        <h2>Delete User</h2>
+        <p>Are you sure you want to delete this user?</p>
+        <button id="confirm-delete" onclick="confirmDelete()">Yes</button>
+        <button onclick="closeDeleteModal()">No</button>
+    </div>
+</div>
+
+<!-- Notification Modal -->
+<div id="notificationModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeNotificationModal()">&times;</span>
+        <h2 id="notificationMessage"></h2>
+    </div>
+</div>
+
+<script src="/js/scriptModifyAccounts.js"></script>
+</body>
+</html>

@@ -33,7 +33,6 @@ public class WebSecurityConfig {
         return authProvider;
     }
 
-    // todo: cand esti logat, daca dai back sa nu poti ajunge la login + creeaza buton log out
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authenticationProvider(authenticationProvider())
@@ -55,6 +54,7 @@ public class WebSecurityConfig {
                                 .logoutSuccessUrl("/login?logout=true")
                                 .permitAll()
                 );
+
         return http.build();
     }
 }

@@ -51,8 +51,10 @@ public class UserController {
             // Perform the update
             if ("username".equals(request.getAction())) {
                 user.setUsername(request.getNewValue());
+                response.put("message", "Username modified successfully.");
             } else if ("password".equals(request.getAction())) {
                 user.setPassword(passwordEncoder.encode(request.getNewValue()));
+                response.put("message", "Password modified successfully.");
             }
             userRepository.save(user);
             response.put("success", true);

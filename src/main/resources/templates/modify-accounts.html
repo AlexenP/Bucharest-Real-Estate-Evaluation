@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <title>Modify Accounts</title>
     <link rel="stylesheet" th:href="@{/css/styleModifyAccounts.css}">
-    <meta name="_csrf" th:content="${_csrf.token}"/>
-    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 <body>
 <div class="container">
@@ -23,8 +21,13 @@
             <td th:text="${user.username}">Username</td>
             <td th:text="${user.authorities[0]?.authority}">Role</td>
             <td>
-                <button class="modify-button" th:data-user-id="${user.userId}" th:data-username="${user.username}" onclick="showModifyModal(this)">Modify</button>
-                <button class="delete-button" th:data-user-id="${user.userId}" onclick="showDeleteModal(this)">Delete</button>
+                <button class="modify-button"
+                        th:data-user-id="${user.userId}"
+                        th:data-username="${user.username}"
+                        th:onclick="'showModifyModal(this)'">Modify</button>
+                <button class="delete-button"
+                        th:data-user-id="${user.userId}"
+                        th:onclick="'showDeleteModal(this)'">Delete</button>
             </td>
         </tr>
         </tbody>
@@ -36,8 +39,9 @@
     <div class="modal-content">
         <span class="close" onclick="closeModal('modifyModal')">&times;</span>
         <h2>Modify User</h2>
-        <form id="modifyForm">
+        <form id="modifyForm" th:action="@{/modify-user/__id__}" method="post">
             <input type="hidden" id="modifyUserId" name="userId">
+            <input type="hidden" name="_csrf" th:value="${_csrf.token}">
             <div>
                 <label for="username">Username:</label>
                 <input type="text" id="username" name="username" readonly>
@@ -53,7 +57,7 @@
                     <option value="password">Change Password</option>
                 </select>
             </div>
-            <div>
+            <div id="newValueDiv">
                 <label for="newValue">New Username/Password:</label>
                 <input type="text" id="newValue" name="newValue">
             </div>
@@ -76,7 +80,7 @@
 <!-- Notification Modal -->
 <div id="notificationModal" class="modal">
     <div class="modal-content">
-        <span class="close" onclick="closeModal('notificationModal')">&times;</span>
+        <span class="close" onclick="closeNotificationModal()">&times;</span>
         <p id="notificationMessage"></p>
     </div>
 </div>

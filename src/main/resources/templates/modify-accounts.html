@@ -49,6 +49,7 @@
             <div>
                 <label for="oldPassword">Old Password:</label>
                 <input type="password" id="oldPassword" name="oldPassword">
+                <button type="button" onclick="togglePasswordVisibility('oldPassword')">Show</button>
             </div>
             <div>
                 <label for="action">Action:</label>
@@ -60,11 +61,13 @@
             <div id="newValueDiv">
                 <label for="newValue">New Username/Password:</label>
                 <input type="text" id="newValue" name="newValue">
+                <button type="button" id="newValueButton" onclick="togglePasswordVisibility('newValue')">Show</button>
             </div>
             <button type="button" onclick="modifyUser()">Submit</button>
         </form>
     </div>
 </div>
+
 
 <!-- Delete User Modal -->
 <div id="deleteModal" class="modal">

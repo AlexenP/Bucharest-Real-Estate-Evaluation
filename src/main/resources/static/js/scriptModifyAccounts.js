@@ -22,14 +22,29 @@ document.addEventListener('DOMContentLoaded', function() {
         const action = document.getElementById('action').value;
         const newValueDiv = document.getElementById('newValueDiv');
         const newValueInput = document.getElementById('newValue');
+        const newValueButton = document.getElementById('newValueButton');
         if (action === 'username') {
             newValueDiv.style.display = 'block';
             newValueInput.type = 'text';
             newValueInput.placeholder = "New Username";
+            newValueButton.style.display = 'none';
         } else if (action === 'password') {
             newValueDiv.style.display = 'block';
             newValueInput.type = 'password';
             newValueInput.placeholder = "New Password";
+            newValueButton.style.display = 'inline'; // Show the button for passwords
+        }
+    }
+
+    function togglePasswordVisibility(fieldId) {
+        const passwordField = document.getElementById(fieldId);
+        const button = passwordField.nextElementSibling;
+        if (passwordField.type === "password") {
+            passwordField.type = "text";
+            button.textContent = "Hide";
+        } else {
+            passwordField.type = "password";
+            button.textContent = "Show";
         }
     }
 
@@ -95,4 +110,5 @@ document.addEventListener('DOMContentLoaded', function() {
     window.modifyUser = modifyUser;
     window.deleteUser = deleteUser;
     window.toggleNewField = toggleNewField;
+    window.togglePasswordVisibility = togglePasswordVisibility;
 });

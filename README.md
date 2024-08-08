@@ -33,7 +33,7 @@ Real Estate Report Generator is a web application designed for generating real e
 
 1. **Clone the repository**:
     ```bash
-    git clone https://github.com/your-username/real-estate-report-generator.git
+    [git clone https://github.com/your-username/real-estate-report-generator.git](https://github.com/AlexenP/Bucharest-Real-Estate-Evaluation.git
     ```
 
 2. **Import the project into your preferred IDE**.
